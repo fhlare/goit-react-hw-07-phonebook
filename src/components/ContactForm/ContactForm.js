@@ -7,7 +7,8 @@ import {
   FormGroup,
 } from './ContactForm.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from '../../redux/contactsSlice';
+import { addContact } from '../../redux/operations';
+import { selectContacts } from '../../redux/selectors';
 
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -20,14 +21,14 @@ const contactSchema = Yup.object().shape({
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const newContact= useSelector(state => state.contacts);
+  const newContact= useSelector(selectContacts);
 
   const handelSubmit = value => {
     const sameContact = newContact.some(contact => contact.name.toLowerCase() === value.name.toLowerCase());
     if (sameContact) {
       alert(`${value.name} is alredy contact`);
     } else {
-      dispatch(addContact(value.name, value.number));
+      dispatch(addContact(value));
     }
   };
   return (
